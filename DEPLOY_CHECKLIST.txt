@@ -1,0 +1,15 @@
+DEPLOY CHECKLIST - Digital Store Ultimate
+1) Create GitHub repo and push project (do NOT commit .env.production with real secrets)
+2) Create Vercel project and link the GitHub repo
+3) In Vercel > Settings > Environment Variables, add the variables from .env.production
+   - For each SECRET: use the exact name and the live value (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, etc.)
+4) Deploy and wait for build
+5) Configure Stripe Webhook:
+   - URL: https://<your-vercel-domain>/api/webhooks/stripe
+   - Events: checkout.session.completed, invoice.payment_succeeded (if subscriptions), charge.refunded
+   - Copy the signing secret to STRIPE_WEBHOOK_SECRET in Vercel env
+6) (Optional) Run `npm run setup:sendgrid` locally with SENDGRID_API_KEY to create SendGrid templates (or create them manually in SendGrid)
+7) Test purchase in Stripe test mode with card 4242 4242 4242 4242
+8) Verify email delivery (SendGrid) and download flow
+9) Configure GitHub Actions secrets for abandoned-cart workflow: add DATABASE_URL and SENDGRID_API_KEY
+10) Replace placeholder IDs (GA4, Meta Pixel, Tawk) in Vercel env
